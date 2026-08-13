@@ -44,7 +44,7 @@ func TestUtilityEntity(t *testing.T) {
 		// The basic flow consumes synthetic IDs from the fixture. In live mode
 		// without an *_ENTID env override, those IDs hit the live API and 4xx.
 		if setup.syntheticOnly {
-			t.Skip("live entity test uses synthetic IDs from fixture — set EMAILVALIDATIONAPI__TEST_UTILITY_ENTID JSON to run live")
+			t.Skip("live entity test uses synthetic IDs from fixture — set EMAIL_VALIDATION_API2_TEST_UTILITY_ENTID JSON to run live")
 			return
 		}
 		client := setup.client
@@ -110,38 +110,38 @@ func utilityBasicSetup(extra map[string]any) *entityTestSetup {
 	// Detect ENTID env override before envOverride consumes it. When live
 	// mode is on without a real override, the basic test runs against synthetic
 	// IDs from the fixture and 4xx's. Surface this so the test can skip.
-	entidEnvRaw := os.Getenv("EMAILVALIDATIONAPI__TEST_UTILITY_ENTID")
+	entidEnvRaw := os.Getenv("EMAIL_VALIDATION_API2_TEST_UTILITY_ENTID")
 	idmapOverridden := entidEnvRaw != "" && strings.HasPrefix(strings.TrimSpace(entidEnvRaw), "{")
 
 	env := envOverride(map[string]any{
-		"EMAILVALIDATIONAPI__TEST_UTILITY_ENTID": idmap,
-		"EMAILVALIDATIONAPI__TEST_LIVE":      "FALSE",
-		"EMAILVALIDATIONAPI__TEST_EXPLAIN":   "FALSE",
-		"EMAILVALIDATIONAPI__APIKEY":         "NONE",
+		"EMAIL_VALIDATION_API2_TEST_UTILITY_ENTID": idmap,
+		"EMAIL_VALIDATION_API2_TEST_LIVE":      "FALSE",
+		"EMAIL_VALIDATION_API2_TEST_EXPLAIN":   "FALSE",
+		"EMAIL_VALIDATION_API2_APIKEY":         "NONE",
 	})
 
-	idmapResolved := core.ToMapAny(env["EMAILVALIDATIONAPI__TEST_UTILITY_ENTID"])
+	idmapResolved := core.ToMapAny(env["EMAIL_VALIDATION_API2_TEST_UTILITY_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
 	}
 
-	if env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE" {
+	if env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE" {
 		mergedOpts := vs.Merge([]any{
 			map[string]any{
-				"apikey": env["EMAILVALIDATIONAPI__APIKEY"],
+				"apikey": env["EMAIL_VALIDATION_API2_APIKEY"],
 			},
 			extra,
 		})
 		client = sdk.NewEmailValidationApi2SDK(core.ToMapAny(mergedOpts))
 	}
 
-	live := env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE"
+	live := env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE"
 	return &entityTestSetup{
 		client:        client,
 		data:          entityData,
 		idmap:         idmapResolved,
 		env:           env,
-		explain:       env["EMAILVALIDATIONAPI__TEST_EXPLAIN"] == "TRUE",
+		explain:       env["EMAIL_VALIDATION_API2_TEST_EXPLAIN"] == "TRUE",
 		live:          live,
 		syntheticOnly: live && !idmapOverridden,
 		now:           time.Now().UnixMilli(),

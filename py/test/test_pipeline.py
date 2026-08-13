@@ -16,11 +16,11 @@
 import pytest
 
 from emailvalidationapi2_sdk import EmailValidationApi2SDK
-from core.error import EmailValidationApi2Error
-from core.result import EmailValidationApi2Result
-from core.response import EmailValidationApi2Response
-from core.spec import EmailValidationApi2Spec
-from feature.base_feature import EmailValidationApi2BaseFeature
+from emailvalidationapi2_sdk.core.error import EmailValidationApi2Error
+from emailvalidationapi2_sdk.core.result import EmailValidationApi2Result
+from emailvalidationapi2_sdk.core.response import EmailValidationApi2Response
+from emailvalidationapi2_sdk.core.spec import EmailValidationApi2Spec
+from emailvalidationapi2_sdk.feature.base_feature import EmailValidationApi2BaseFeature
 
 
 def _client():

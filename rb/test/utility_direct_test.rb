@@ -65,16 +65,16 @@ def utility_direct_setup(mockres)
   calls = []
 
   env = Runner.env_override({
-    "EMAILVALIDATIONAPI__TEST_UTILITY_ENTID" => {},
-    "EMAILVALIDATIONAPI__TEST_LIVE" => "FALSE",
-    "EMAILVALIDATIONAPI__APIKEY" => "NONE",
+    "EMAIL_VALIDATION_API2_TEST_UTILITY_ENTID" => {},
+    "EMAIL_VALIDATION_API2_TEST_LIVE" => "FALSE",
+    "EMAIL_VALIDATION_API2_APIKEY" => "NONE",
   })
 
-  live = env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE"
+  live = env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE"
 
   if live
     merged_opts = {
-      "apikey" => env["EMAILVALIDATIONAPI__APIKEY"],
+      "apikey" => env["EMAIL_VALIDATION_API2_APIKEY"],
     }
     client = EmailValidationApi2SDK.new(merged_opts)
     return {

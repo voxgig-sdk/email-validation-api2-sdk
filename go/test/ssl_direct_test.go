@@ -36,9 +36,10 @@ func TestSslDirect(t *testing.T) {
 			"params": map[string]any{},
 		})
 		if setup.live {
-			// Live mode is lenient: synthetic IDs frequently 4xx and the
-			// list-response shape varies wildly across public APIs. Skip
-			// rather than fail when the call doesn't return a usable list.
+			// Live-mode leniency is a model decision
+			// (main.kit.test.live.strict): synthetic IDs 4xx constantly
+			// against an arbitrary public API, so the default SKIPS here.
+			// A project that owns its test server sets strict and FAILS.
 			if err != nil {
 				t.Skipf("list call failed (likely synthetic IDs against live API): %v", err)
 			}
@@ -91,21 +92,21 @@ func sslDirectSetup(mockres any) *sslDirectSetupResult {
 	calls := &[]map[string]any{}
 
 	env := envOverride(map[string]any{
-		"EMAILVALIDATIONAPI__TEST_SSL_ENTID": map[string]any{},
-		"EMAILVALIDATIONAPI__TEST_LIVE":    "FALSE",
-		"EMAILVALIDATIONAPI__APIKEY":       "NONE",
+		"EMAIL_VALIDATION_API2_TEST_SSL_ENTID": map[string]any{},
+		"EMAIL_VALIDATION_API2_TEST_LIVE":    "FALSE",
+		"EMAIL_VALIDATION_API2_APIKEY":       "NONE",
 	})
 
-	live := env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE"
+	live := env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE"
 
 	if live {
 		mergedOpts := map[string]any{
-			"apikey": env["EMAILVALIDATIONAPI__APIKEY"],
+			"apikey": env["EMAIL_VALIDATION_API2_APIKEY"],
 		}
 		client := sdk.NewEmailValidationApi2SDK(mergedOpts)
 
 		idmap := map[string]any{}
-		if entidRaw, ok := env["EMAILVALIDATIONAPI__TEST_SSL_ENTID"]; ok {
+		if entidRaw, ok := env["EMAIL_VALIDATION_API2_TEST_SSL_ENTID"]; ok {
 			if entidStr, ok := entidRaw.(string); ok && strings.HasPrefix(entidStr, "{") {
 				json.Unmarshal([]byte(entidStr), &idmap)
 			} else if entidMap, ok := entidRaw.(map[string]any); ok {

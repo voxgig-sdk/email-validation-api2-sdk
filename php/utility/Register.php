@@ -23,6 +23,7 @@ require_once __DIR__ . '/MakeUrl.php';
 require_once __DIR__ . '/Param.php';
 require_once __DIR__ . '/PrepareAuth.php';
 require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
 require_once __DIR__ . '/PrepareHeaders.php';
 require_once __DIR__ . '/PrepareMethod.php';
 require_once __DIR__ . '/PrepareParams.php';
@@ -59,6 +60,8 @@ EmailValidationApi2Utility::setRegistrar(function (EmailValidationApi2Utility $u
     $u->prepare_params = [EmailValidationApi2PrepareParams::class, 'call'];
     $u->prepare_path = [EmailValidationApi2PreparePath::class, 'call'];
     $u->prepare_query = [EmailValidationApi2PrepareQuery::class, 'call'];
+    $u->graphql_body = [EmailValidationApi2Graphql::class, 'body'];
+    $u->graphql_errors = [EmailValidationApi2Graphql::class, 'errors'];
     $u->result_basic = [EmailValidationApi2ResultBasic::class, 'call'];
     $u->result_body = [EmailValidationApi2ResultBody::class, 'call'];
     $u->result_headers = [EmailValidationApi2ResultHeaders::class, 'call'];

@@ -14,12 +14,12 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from config import make_config
-from features import _make_feature
-from core.control import EmailValidationApi2Control
-from core.error import EmailValidationApi2Error
-from core.result import EmailValidationApi2Result
-from core.spec import EmailValidationApi2Spec
+from projectname_sdk.config import make_config
+from projectname_sdk.features import _make_feature
+from projectname_sdk.core.control import EmailValidationApi2Control
+from projectname_sdk.core.error import EmailValidationApi2Error
+from projectname_sdk.core.result import EmailValidationApi2Result
+from projectname_sdk.core.spec import EmailValidationApi2Spec
 
 
 # True when this SDK was generated with the named feature.

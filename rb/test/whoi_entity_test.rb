@@ -62,7 +62,7 @@ class WhoiEntityTest < Minitest::Test
     # The basic flow consumes synthetic IDs from the fixture. In live mode
     # without an *_ENTID env override, those IDs hit the live API and 4xx.
     if setup[:synthetic_only]
-      skip "live entity test uses synthetic IDs from fixture — set EMAILVALIDATIONAPI__TEST_WHOI_ENTID JSON to run live"
+      skip "live entity test uses synthetic IDs from fixture — set EMAIL_VALIDATION_API2_TEST_WHOI_ENTID JSON to run live"
       return
     end
     client = setup[:client]
@@ -111,39 +111,39 @@ def whoi_basic_setup(extra)
   # Detect ENTID env override before envOverride consumes it. When live
   # mode is on without a real override, the basic test runs against synthetic
   # IDs from the fixture and 4xx's. Surface this so the test can skip.
-  entid_env_raw = ENV["EMAILVALIDATIONAPI__TEST_WHOI_ENTID"]
+  entid_env_raw = ENV["EMAIL_VALIDATION_API2_TEST_WHOI_ENTID"]
   idmap_overridden = !entid_env_raw.nil? && entid_env_raw.strip.start_with?("{")
 
   env = Runner.env_override({
-    "EMAILVALIDATIONAPI__TEST_WHOI_ENTID" => idmap,
-    "EMAILVALIDATIONAPI__TEST_LIVE" => "FALSE",
-    "EMAILVALIDATIONAPI__TEST_EXPLAIN" => "FALSE",
-    "EMAILVALIDATIONAPI__APIKEY" => "NONE",
+    "EMAIL_VALIDATION_API2_TEST_WHOI_ENTID" => idmap,
+    "EMAIL_VALIDATION_API2_TEST_LIVE" => "FALSE",
+    "EMAIL_VALIDATION_API2_TEST_EXPLAIN" => "FALSE",
+    "EMAIL_VALIDATION_API2_APIKEY" => "NONE",
   })
 
   idmap_resolved = Helpers.to_map(
-    env["EMAILVALIDATIONAPI__TEST_WHOI_ENTID"])
+    env["EMAIL_VALIDATION_API2_TEST_WHOI_ENTID"])
   if idmap_resolved.nil?
     idmap_resolved = Helpers.to_map(idmap)
   end
 
-  if env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE"
+  if env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE"
     merged_opts = Vs.merge([
       {
-        "apikey" => env["EMAILVALIDATIONAPI__APIKEY"],
+        "apikey" => env["EMAIL_VALIDATION_API2_APIKEY"],
       },
       extra || {},
     ])
     client = EmailValidationApi2SDK.new(Helpers.to_map(merged_opts))
   end
 
-  live = env["EMAILVALIDATIONAPI__TEST_LIVE"] == "TRUE"
+  live = env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE"
   {
     client: client,
     data: entity_data,
     idmap: idmap_resolved,
     env: env,
-    explain: env["EMAILVALIDATIONAPI__TEST_EXPLAIN"] == "TRUE",
+    explain: env["EMAIL_VALIDATION_API2_TEST_EXPLAIN"] == "TRUE",
     live: live,
     synthetic_only: live && !idmap_overridden,
     now: (Time.now.to_f * 1000).to_i,

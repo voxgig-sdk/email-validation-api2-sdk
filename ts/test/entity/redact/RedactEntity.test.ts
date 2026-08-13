@@ -26,8 +26,8 @@ import {
 describe('RedactEntity', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when EMAILVALIDATIONAPI2_TEST_LIVE=TRUE.
-  afterEach(liveDelay('EMAILVALIDATIONAPI2_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when EMAIL_VALIDATION_API2_TEST_LIVE=TRUE.
+  afterEach(liveDelay('EMAIL_VALIDATION_API2_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = EmailValidationApi2SDK.test()
@@ -38,7 +38,7 @@ describe('RedactEntity', async () => {
 
   test('basic', async (t) => {
 
-    const live = 'TRUE' === process.env.EMAIL_VALIDATION_API__TEST_LIVE
+    const live = 'TRUE' === process.env.EMAIL_VALIDATION_API2_TEST_LIVE
     for (const op of ['create']) {
       if (maybeSkipControl(t, 'entityOp', 'redact.' + op, live)) return
     }
@@ -48,7 +48,7 @@ describe('RedactEntity', async () => {
     // fixture (entity TestData.json). Those don't exist on the live API.
     // Skip live runs unless the user provided a real ENTID env override.
     if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set EMAIL_VALIDATION_API__TEST_REDACT_ENTID JSON to run live')
+      t.skip('live entity test uses synthetic IDs from fixture — set EMAIL_VALIDATION_API2_TEST_REDACT_ENTID JSON to run live')
       return
     }
     const client = setup.client
@@ -62,7 +62,7 @@ describe('RedactEntity', async () => {
     const redact_ref01_ent = client.Redact()
     let redact_ref01_data = setup.data.new.redact['redact_ref01']
 
-    redact_ref01_data = await redact_ref01_ent.create(redact_ref01_data)
+    redact_ref01_data = (await redact_ref01_ent.create(redact_ref01_data)).data()
     assert(null != redact_ref01_data)
 
 
@@ -106,24 +106,24 @@ function basicSetup(extra?: any) {
   // basic flow consumes synthetic IDs from the fixture file; without an
   // override those synthetic IDs reach the live API and 4xx. Surface this
   // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['EMAIL_VALIDATION_API__TEST_REDACT_ENTID']
+  const idmapEnvVal = process.env['EMAIL_VALIDATION_API2_TEST_REDACT_ENTID']
   const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
 
   const env = envOverride({
-    'EMAIL_VALIDATION_API__TEST_REDACT_ENTID': idmap,
-    'EMAIL_VALIDATION_API__TEST_LIVE': 'FALSE',
-    'EMAIL_VALIDATION_API__TEST_EXPLAIN': 'FALSE',
-    'EMAIL_VALIDATION_API__APIKEY': 'NONE',
+    'EMAIL_VALIDATION_API2_TEST_REDACT_ENTID': idmap,
+    'EMAIL_VALIDATION_API2_TEST_LIVE': 'FALSE',
+    'EMAIL_VALIDATION_API2_TEST_EXPLAIN': 'FALSE',
+    'EMAIL_VALIDATION_API2_APIKEY': 'NONE',
   })
 
-  idmap = env['EMAIL_VALIDATION_API__TEST_REDACT_ENTID']
+  idmap = env['EMAIL_VALIDATION_API2_TEST_REDACT_ENTID']
 
-  const live = 'TRUE' === env.EMAIL_VALIDATION_API__TEST_LIVE
+  const live = 'TRUE' === env.EMAIL_VALIDATION_API2_TEST_LIVE
 
   if (live) {
     client = new EmailValidationApi2SDK(merge([
       {
-        apikey: env.EMAIL_VALIDATION_API__APIKEY,
+        apikey: env.EMAIL_VALIDATION_API2_APIKEY,
       },
       extra
     ]))
@@ -136,7 +136,7 @@ function basicSetup(extra?: any) {
     client,
     struct,
     data: entityData,
-    explain: 'TRUE' === env.EMAIL_VALIDATION_API__TEST_EXPLAIN,
+    explain: 'TRUE' === env.EMAIL_VALIDATION_API2_TEST_EXPLAIN,
     live,
     syntheticOnly: live && !idmapOverridden,
     now: Date.now(),

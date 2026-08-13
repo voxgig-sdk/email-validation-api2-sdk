@@ -1,4 +1,4 @@
-# ProjectName SDK exists test
+# EmailValidationApi2 SDK exists test
 
 import pytest
 from emailvalidationapi2_sdk import EmailValidationApi2SDK

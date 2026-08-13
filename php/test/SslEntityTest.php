@@ -72,7 +72,7 @@ class SslEntityTest extends TestCase
         // The basic flow consumes synthetic IDs from the fixture. In live mode
         // without an *_ENTID env override, those IDs hit the live API and 4xx.
         if (!empty($setup["synthetic_only"])) {
-            $this->markTestSkipped("live entity test uses synthetic IDs from fixture — set EMAILVALIDATIONAPI__TEST_SSL_ENTID JSON to run live");
+            $this->markTestSkipped("live entity test uses synthetic IDs from fixture — set EMAIL_VALIDATION_API2_TEST_SSL_ENTID JSON to run live");
             return;
         }
         $client = $setup["client"];
@@ -117,39 +117,39 @@ function ssl_basic_setup($extra)
     // Detect ENTID env override before envOverride consumes it. When live
     // mode is on without a real override, the basic test runs against synthetic
     // IDs from the fixture and 4xx's. Surface this so the test can skip.
-    $entid_env_raw = getenv("EMAILVALIDATIONAPI__TEST_SSL_ENTID");
+    $entid_env_raw = getenv("EMAIL_VALIDATION_API2_TEST_SSL_ENTID");
     $idmap_overridden = $entid_env_raw !== false && str_starts_with(trim($entid_env_raw), "{");
 
     $env = Runner::env_override([
-        "EMAILVALIDATIONAPI__TEST_SSL_ENTID" => $idmap,
-        "EMAILVALIDATIONAPI__TEST_LIVE" => "FALSE",
-        "EMAILVALIDATIONAPI__TEST_EXPLAIN" => "FALSE",
-        "EMAILVALIDATIONAPI__APIKEY" => "NONE",
+        "EMAIL_VALIDATION_API2_TEST_SSL_ENTID" => $idmap,
+        "EMAIL_VALIDATION_API2_TEST_LIVE" => "FALSE",
+        "EMAIL_VALIDATION_API2_TEST_EXPLAIN" => "FALSE",
+        "EMAIL_VALIDATION_API2_APIKEY" => "NONE",
     ]);
 
     $idmap_resolved = Helpers::to_map(
-        $env["EMAILVALIDATIONAPI__TEST_SSL_ENTID"]);
+        $env["EMAIL_VALIDATION_API2_TEST_SSL_ENTID"]);
     if ($idmap_resolved === null) {
         $idmap_resolved = Helpers::to_map($idmap);
     }
 
-    if ($env["EMAILVALIDATIONAPI__TEST_LIVE"] === "TRUE") {
+    if ($env["EMAIL_VALIDATION_API2_TEST_LIVE"] === "TRUE") {
         $merged_opts = Vs::merge([
             [
-                "apikey" => $env["EMAILVALIDATIONAPI__APIKEY"],
+                "apikey" => $env["EMAIL_VALIDATION_API2_APIKEY"],
             ],
             $extra ?? [],
         ]);
         $client = new EmailValidationApi2SDK(Helpers::to_map($merged_opts));
     }
 
-    $live = $env["EMAILVALIDATIONAPI__TEST_LIVE"] === "TRUE";
+    $live = $env["EMAIL_VALIDATION_API2_TEST_LIVE"] === "TRUE";
     return [
         "client" => $client,
         "data" => $entity_data,
         "idmap" => $idmap_resolved,
         "env" => $env,
-        "explain" => $env["EMAILVALIDATIONAPI__TEST_EXPLAIN"] === "TRUE",
+        "explain" => $env["EMAIL_VALIDATION_API2_TEST_EXPLAIN"] === "TRUE",
         "live" => $live,
         "synthetic_only" => $live && !$idmap_overridden,
         "now" => (int)(microtime(true) * 1000),

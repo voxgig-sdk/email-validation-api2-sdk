@@ -43,8 +43,8 @@ class EmailValidationApi2TestRunner
 
     public static function env_override(array $m): array
     {
-        $live = self::getenv('EMAILVALIDATIONAPI2_TEST_LIVE');
-        $override = self::getenv('EMAILVALIDATIONAPI2_TEST_OVERRIDE');
+        $live = self::getenv('EMAIL_VALIDATION_API2_TEST_LIVE');
+        $override = self::getenv('EMAIL_VALIDATION_API2_TEST_OVERRIDE');
 
         if ($live === 'TRUE' || $override === 'TRUE') {
             foreach (array_keys($m) as $key) {
@@ -63,9 +63,9 @@ class EmailValidationApi2TestRunner
             }
         }
 
-        $explain = self::getenv('EMAILVALIDATIONAPI2_TEST_EXPLAIN');
+        $explain = self::getenv('EMAIL_VALIDATION_API2_TEST_EXPLAIN');
         if ($explain !== null && $explain !== '') {
-            $m['EMAILVALIDATIONAPI2_TEST_EXPLAIN'] = $explain;
+            $m['EMAIL_VALIDATION_API2_TEST_EXPLAIN'] = $explain;
         }
 
         return $m;

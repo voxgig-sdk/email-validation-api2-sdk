@@ -28,7 +28,7 @@ class EmailValidationApi2SDK
     utility = EmailValidationApi2Utility.new
     @_utility = utility
 
-    config = EmailValidationApi2Config.make_config
+    config = EmailValidationApi2Config.shared_config
 
     @_rootctx = utility.make_context.call({
       "client" => self,

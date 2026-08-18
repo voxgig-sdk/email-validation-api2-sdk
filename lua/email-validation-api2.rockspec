@@ -23,6 +23,7 @@ build = {
   modules = {
     ["email-validation-api2_sdk"] = "email-validation-api2_sdk.lua",
     ["config"] = "config.lua",
+    ["config_shared"] = "config_shared.lua",
     ["features"] = "features.lua",
   }
 }

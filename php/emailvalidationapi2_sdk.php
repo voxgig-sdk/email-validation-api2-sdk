@@ -40,7 +40,7 @@ class EmailValidationApi2SDK
         $utility = new EmailValidationApi2Utility();
         $this->_utility = $utility;
 
-        $config = EmailValidationApi2Config::make_config();
+        $config = EmailValidationApi2Config::shared_config();
 
         $this->_rootctx = ($utility->make_context)([
             "client" => $this,

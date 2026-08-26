@@ -42,6 +42,7 @@ class EmailValidationApi2Config
           'options' => [
             'active' => false,
           ],
+          'transport' => 'base',
         ],
             ],
             "options" => [

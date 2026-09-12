@@ -68,15 +68,17 @@ function whoi_direct_setup($mockres)
     $env = Runner::env_override([
         "EMAIL_VALIDATION_API2_TEST_WHOI_ENTID" => [],
         "EMAIL_VALIDATION_API2_TEST_LIVE" => "FALSE",
-        "EMAIL_VALIDATION_API2_APIKEY" => "NONE",
+        "EMAIL_VALIDATION_API2_APIKEY" => "",
     ]);
 
     $live = $env["EMAIL_VALIDATION_API2_TEST_LIVE"] === "TRUE";
 
     if ($live) {
-        $merged_opts = [
+        // Merged so the generated fields win: sdk-test-control.json's
+        // test.client.options adds to the live client, it does not redirect it.
+        $merged_opts = array_merge(Runner::live_client_options(), [
             "apikey" => $env["EMAIL_VALIDATION_API2_APIKEY"],
-        ];
+        ]);
         $client = new EmailValidationApi2SDK($merged_opts);
         return [
             "client" => $client,

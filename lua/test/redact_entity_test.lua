@@ -86,7 +86,7 @@ function redact_basic_setup(extra)
     ["EMAIL_VALIDATION_API2_TEST_REDACT_ENTID"] = idmap,
     ["EMAIL_VALIDATION_API2_TEST_LIVE"] = "FALSE",
     ["EMAIL_VALIDATION_API2_TEST_EXPLAIN"] = "FALSE",
-    ["EMAIL_VALIDATION_API2_APIKEY"] = "NONE",
+    ["EMAIL_VALIDATION_API2_APIKEY"] = "",
   })
 
   local idmap_resolved = helpers.to_map(
@@ -97,6 +97,9 @@ function redact_basic_setup(extra)
 
   if env["EMAIL_VALIDATION_API2_TEST_LIVE"] == "TRUE" then
     local merged_opts = vs.merge({
+      -- FIRST, so the generated fields below win: sdk-test-control.json's
+      -- test.client.options adds to the live client, it does not redirect it.
+      runner.live_client_options(),
       {
         apikey = env["EMAIL_VALIDATION_API2_APIKEY"],
       },

@@ -63,15 +63,18 @@ def _email_validate_direct_setup(mockres):
     env = runner.env_override({
         "EMAIL_VALIDATION_API2_TEST_EMAIL_VALIDATE_ENTID": {},
         "EMAIL_VALIDATION_API2_TEST_LIVE": "FALSE",
-        "EMAIL_VALIDATION_API2_APIKEY": "NONE",
+        "EMAIL_VALIDATION_API2_APIKEY": "",
     })
 
     live = env.get("EMAIL_VALIDATION_API2_TEST_LIVE") == "TRUE"
 
     if live:
-        merged_opts = {
+        # sdk-test-control.json's test.client.options seeds the live
+        # client; the generated fields below overwrite anything they name.
+        merged_opts = dict(runner.live_client_options())
+        merged_opts.update({
             "apikey": env.get("EMAIL_VALIDATION_API2_APIKEY"),
-        }
+        })
         client = EmailValidationApi2SDK(merged_opts)
         return {
             "client": client,

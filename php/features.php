@@ -4,7 +4,10 @@ declare(strict_types=1);
 // EmailValidationApi2 SDK feature factory
 
 require_once __DIR__ . '/feature/BaseFeature.php';
+require_once __DIR__ . '/feature/RatelimitFeature.php';
+require_once __DIR__ . '/feature/RetryFeature.php';
 require_once __DIR__ . '/feature/TestFeature.php';
+require_once __DIR__ . '/feature/TimeoutFeature.php';
 
 
 class EmailValidationApi2Features
@@ -14,8 +17,14 @@ class EmailValidationApi2Features
         switch ($name) {
             case "base":
                 return new EmailValidationApi2BaseFeature();
+            case "ratelimit":
+                return new EmailValidationApi2RatelimitFeature();
+            case "retry":
+                return new EmailValidationApi2RetryFeature();
             case "test":
                 return new EmailValidationApi2TestFeature();
+            case "timeout":
+                return new EmailValidationApi2TimeoutFeature();
             default:
                 return new EmailValidationApi2BaseFeature();
         }
@@ -31,7 +40,10 @@ class EmailValidationApi2Features
     {
         switch ($name) {
             case "base":
+            case "ratelimit":
+            case "retry":
             case "test":
+            case "timeout":
                 return true;
             default:
                 return false;

@@ -19,7 +19,6 @@ import type {
   DomainListMatch,
 } from '../EmailValidationApi2Types'
 
-// TODO: needs Entity superclass
 class DomainEntity extends EmailValidationApi2EntityBase<Domain> {
 
   constructor(client: EmailValidationApi2SDK, entopts: any) {

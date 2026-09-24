@@ -19,7 +19,6 @@ import type {
   SslListMatch,
 } from '../EmailValidationApi2Types'
 
-// TODO: needs Entity superclass
 class SslEntity extends EmailValidationApi2EntityBase<Ssl> {
 
   constructor(client: EmailValidationApi2SDK, entopts: any) {
